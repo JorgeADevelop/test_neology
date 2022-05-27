@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\CarControllers;
 
 use App\Http\Controllers\Controller;
+use App\Mail\BalanceNotification;
 use App\Models\CarModels\Car;
 use App\Models\CarModels\CarBinnacle;
 use App\Models\CarModels\CarType;
+use App\Models\UserModels\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class CarBinnacleController extends Controller
@@ -285,7 +288,7 @@ class CarBinnacleController extends Controller
         return $pdf->download($request->filename.'.pdf');
     }
 
-    private function generateBalance($car_binnacles_id, $start_date, $end_date) {
+    public function generateBalance($car_binnacles_id, $start_date, $end_date) {
         $balance = [];
         foreach ($car_binnacles_id as $car_binnacle_id) {
             $car_binnacles = CarBinnacle::where([

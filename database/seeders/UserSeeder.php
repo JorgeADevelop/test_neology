@@ -18,6 +18,7 @@ class UserSeeder extends Seeder
             "name" => "jorge",
             "lastname" => "andrew",
             "username" => "admin",
+            "email" => "admin@gmail.com",
             "password" => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
             "user_type_id" => 1
         ]);
@@ -26,6 +27,7 @@ class UserSeeder extends Seeder
             "name" => "jorge",
             "lastname" => "andrew",
             "username" => "checker",
+            "email" => "checker@gmail.com",
             "password" => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
             "user_type_id" => 2
         ]);
