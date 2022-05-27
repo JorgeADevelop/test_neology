@@ -52,6 +52,20 @@ class CarTypeController extends Controller
      */
     public function store(Request $request)
     {
+        if(!$request->user()->currentAccessToken()->can('admin')){
+            return response()->json([
+                'code'      => 401,
+                'status'    => 'unauthorized',
+                'message'   => 'Without permission',
+                'data'      => null,
+                'errors'    => [
+                    'Token does not have permission in this resource'
+                    ]
+            ], 401, [
+                'Content-Type' => 'application/json'
+            ]);
+        }
+
         $validation = Validator::make($request->all(), [
             'type' => 'required|min:2',
             'cost_minute' => 'required|numeric'
@@ -70,7 +84,7 @@ class CarTypeController extends Controller
         }
 
         $request_data = $request->merge([
-            'created_by' => 1,
+            'created_by' => $request->user()->id,
             'updated_by' => null
         ])->all();
 
@@ -107,6 +121,20 @@ class CarTypeController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if(!$request->user()->currentAccessToken()->can('admin')){
+            return response()->json([
+                'code'      => 401,
+                'status'    => 'unauthorized',
+                'message'   => 'Without permission',
+                'data'      => null,
+                'errors'    => [
+                    'Token does not have permission in this resource'
+                    ]
+            ], 401, [
+                'Content-Type' => 'application/json'
+            ]);
+        }
+
         $validation = Validator::make($request->all(), [
             'type' => 'required|min:2',
             'cost_minute' => 'required|numeric'
@@ -142,7 +170,7 @@ class CarTypeController extends Controller
         }
 
         $request_data = $request->merge([
-            'updated_by' => 1
+            'updated_by' => $request->user()->id
         ])->all();
 
         unset($request_data['id']);
@@ -168,8 +196,22 @@ class CarTypeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($id, Request $request)
     {
+        if(!$request->user()->currentAccessToken()->can('admin')){
+            return response()->json([
+                'code'      => 401,
+                'status'    => 'unauthorized',
+                'message'   => 'Without permission',
+                'data'      => null,
+                'errors'    => [
+                    'Token does not have permission in this resource'
+                    ]
+            ], 401, [
+                'Content-Type' => 'application/json'
+            ]);
+        }
+
         $car_type = CarType::where('id', $id)
             ->first();
 

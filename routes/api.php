@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CarControllers;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,9 +18,12 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::apiResource('car-type', CarControllers\CarTypeController::class)
-    ->except('show');
-Route::apiResource('car', CarControllers\CarController::class);
+    ->except('show')
+    ->middleware(['auth:sanctum']);
+Route::apiResource('car', CarControllers\CarController::class)
+    ->middleware(['auth:sanctum']);
 Route::apiResource('car-binnacle', CarControllers\CarBinnacleController::class)
-    ->except(['update', 'destroy']);
-Route::post('/print-binnacle-dates', [CarControllers\CarBinnacleController::class, 'printBinnacleByDates']);
-Route::post('/test-mail', [CarControllers\CarBinnacleController::class, 'testemail']);
+    ->except(['update', 'destroy'])
+    ->middleware(['auth:sanctum']);
+Route::post('/print-binnacle-dates', [CarControllers\CarBinnacleController::class, 'printBinnacleByDates'])
+    ->middleware(['auth:sanctum']);

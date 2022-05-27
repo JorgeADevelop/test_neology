@@ -3,15 +3,11 @@
 namespace App\Http\Controllers\CarControllers;
 
 use App\Http\Controllers\Controller;
-use App\Mail\BalanceNotification;
 use App\Models\CarModels\Car;
 use App\Models\CarModels\CarBinnacle;
-use App\Models\CarModels\CarType;
-use App\Models\UserModels\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class CarBinnacleController extends Controller
@@ -94,7 +90,7 @@ class CarBinnacleController extends Controller
             $car = Car::create([
                 'registration_number' => $request->registration_number,
                 'car_type_id' => 3,
-                'created_by' => 1,
+                'created_by' => $request->user()->id,
                 'updated_by' => null,
             ]);
         }
@@ -124,10 +120,8 @@ class CarBinnacleController extends Controller
             $request_data = [
                 'car_id' => $car->id,
                 'delivery_time' => Carbon::now('America/Mexico_City')->format('Y-m-d h:i:s'),
-                'deliver_by_user_id' => 1,
+                'deliver_by_user_id' => $request->user()->id,
                 'departure_time' => null,
-                'departure_by_user_id' => null,
-                'deliver_by_user_id' => 1,
                 'departure_by_user_id' => null
             ];
     
@@ -157,7 +151,7 @@ class CarBinnacleController extends Controller
 
             $request_data = [
                 'car_binnacles.departure_time' => Carbon::now('America/Mexico_City')->format('Y-m-d h:i:s'),
-                'car_binnacles.departure_by_user_id' => 1
+                'car_binnacles.departure_by_user_id' => $request->user()->id
             ];
 
             $car_binnacle = tap(CarBinnacle::where('id', $car_binnacle_exist->id))
