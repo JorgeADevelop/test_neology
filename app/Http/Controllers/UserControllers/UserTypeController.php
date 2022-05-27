@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\UserControllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\UserModels\UserBinnacle;
+use App\Models\UserModels\UserType;
 use Illuminate\Http\Request;
 
-class UserBinnacleController extends Controller
+class UserTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -28,18 +28,17 @@ class UserBinnacleController extends Controller
                 'Content-Type' => 'application/json'
             ]);
         }
-        
-        $user_binnacle = UserBinnacle::orderBy('created_at', 'desc')
-            ->simplePaginate(15);
 
-        if(count($user_binnacle) <= 0) {
+        $user_types = UserType::get();
+
+        if(count($user_types) <= 0) {
             return response()->json([
                 'code'      => 200,
                 'status'    => 'success',
-                'message'   => 'User binnacle found successfuly',
-                'data'      => $user_binnacle,
+                'message'   => 'User types found successfuly',
+                'data'      => $user_types,
                 'errors'    => [
-                    'Empty Car binnacle'
+                    'Empty Car types'
                     ]
             ], 200, [
                 'Content-Type' => 'application/json'
@@ -49,8 +48,8 @@ class UserBinnacleController extends Controller
         return response()->json([
             'code'      => 200,
             'status'    => 'success',
-            'message'   => 'User binnacle found successfuly',
-            'data'      => $user_binnacle,
+            'message'   => 'User types found successfuly',
+            'data'      => $user_types,
             'errors'    => null
         ], 200, [
             'Content-Type' => 'application/json'
