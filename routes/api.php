@@ -27,7 +27,7 @@ Route::apiResource('car', CarControllers\CarController::class)
 Route::apiResource('car-binnacle', CarControllers\CarBinnacleController::class)
     ->except(['update', 'destroy'])
     ->middleware(['auth:sanctum']);
-Route::post('/print-binnacle-dates', [CarControllers\CarBinnacleController::class, 'printBinnacleByDates'])
+Route::post('/print-binnacle', [CarControllers\CarBinnacleController::class, 'printBinnacleByDates'])
     ->middleware(['auth:sanctum']);
 
 //User resources

@@ -27,6 +27,15 @@
 
 
 ## Description
+ * Login as admin or checker with (/login - POST) path
+ * Register new checkers with (/user - POST) path
+ * Register a delivery or departure with (/car_binacle - POST) path. Set true or false one of properties
+ * Update a car type with (/car - PUT) path.
+ * Create new car types with (/car-type - POST) path
+ * Print a balance with (/print-binnacle - POST) path. Set the start and end of dates.
+ * Cron job created to start the month
+ * Cron job created to send monthly balance
+ * And more paths to use 🎯
 
 ## Tests
 
