@@ -33,9 +33,9 @@ class SendBalance extends Command
      */
     public function handle()
     {
-        $start_date = Carbon::now()->startOfMonth();
+        $start_date = Carbon::now('America/Mexico_City')->startOfMonth();
 
-        $end_date = Carbon::now()->endOfDay();
+        $end_date = Carbon::now('America/Mexico_City')->endOfDay();
 
         $car_binnacles = CarBinnacle::select('car_id')
             ->where([

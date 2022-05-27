@@ -16,9 +16,9 @@ return new class extends Migration
         Schema::create('car_binnacles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('car_id');
-            $table->timestamp('delivery_time');
+            $table->dateTime('delivery_time');
             $table->foreignId('deliver_by_user_id');
-            $table->timestamp('departure_time')->nullable();
+            $table->dateTime('departure_time')->nullable();
             $table->foreignId('departure_by_user_id')->nullable();
             $table->timestamps();
 

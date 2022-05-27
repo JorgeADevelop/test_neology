@@ -123,7 +123,7 @@ class CarBinnacleController extends Controller
 
             $request_data = [
                 'car_id' => $car->id,
-                'delivery_time' => now(),
+                'delivery_time' => Carbon::now('America/Mexico_City')->format('Y-m-d h:i:s'),
                 'deliver_by_user_id' => 1,
                 'departure_time' => null,
                 'departure_by_user_id' => null,
@@ -156,7 +156,7 @@ class CarBinnacleController extends Controller
             }
 
             $request_data = [
-                'car_binnacles.departure_time' => now(),
+                'car_binnacles.departure_time' => Carbon::now('America/Mexico_City')->format('Y-m-d h:i:s'),
                 'car_binnacles.departure_by_user_id' => 1
             ];
 
