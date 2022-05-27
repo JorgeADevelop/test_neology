@@ -16,10 +16,12 @@ class UserTypeSeeder extends Seeder
     {
         $user_types = [
             [
-                'type' => 'admin'
+                'type' => 'admin',
+                'abilities' => "admin"
             ],
             [
-                'type' => 'checker'
+                'type' => 'checker',
+                'abilities' => "check"
             ]
         ];
 
