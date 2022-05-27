@@ -16,4 +16,8 @@ class CarBinnacle extends Model
         'departure_time',
         'departure_by_user_id'
     ];
+
+    public function Car() {
+        return $this->belongsTo(Car::class);
+    }
 }

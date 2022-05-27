@@ -5,7 +5,10 @@ namespace App\Http\Controllers\CarControllers;
 use App\Http\Controllers\Controller;
 use App\Models\CarModels\Car;
 use App\Models\CarModels\CarBinnacle;
+use App\Models\CarModels\CarType;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Validator;
 
 class CarBinnacleController extends Controller
@@ -227,5 +230,91 @@ class CarBinnacleController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function printBinnacleByDates(Request $request) {
+        $validation = Validator::make($request->all(), [
+            'start_date' => "date",
+            'end_date' => "date"
+        ]);
+
+        if($validation->fails()) {
+            return response()->json([
+                'code'      => 400,
+                'status'    => 'bad request',
+                'message'   => 'Validation fails',
+                'data'      => null,
+                'errors'    => $validation->errors()
+            ], 400, [
+                'Content-Type' => 'application/json'
+            ]);
+        }
+
+        $start_date = Carbon::parse($request->start_date)->startOfDay();
+
+        $end_date = Carbon::parse($request->end_date)->endOfDay();
+
+        $car_binnacles = CarBinnacle::select('car_id')
+            ->where([
+                ['delivery_time', '>=', $start_date],
+                ['delivery_time', '<=', $end_date]
+            ])
+            ->get();
+
+        $car_binnacles_id = $car_binnacles->map(function($car_binnacle) {
+            return $car_binnacle->car_id;
+        })->toArray();
+
+        $car_binnacles_collector = collect($car_binnacles_id);
+
+        $balance_data = self::generateBalance(
+            $car_binnacles_collector->unique(),
+            $start_date,
+            $end_date
+        );
+
+        $pdf = App::make('dompdf.wrapper');
+
+        $data = [
+            'balance_data' => $balance_data
+        ];
+
+        $pdf->loadView('pdf.binnacle', $data);
+
+        return $pdf->download('mi-archivo.pdf');
+    }
+
+    private function generateBalance($car_binnacles_id, $start_date, $end_date) {
+        $balance = [];
+        foreach ($car_binnacles_id as $car_binnacle_id) {
+            $car_binnacles = CarBinnacle::where([
+                    ['car_id', $car_binnacle_id],
+                    ['delivery_time', '>=', $start_date],
+                    ['delivery_time', '<=', $end_date]
+                ])
+                ->get();
+
+            $total_to_pay = 0;
+            $total_minutes = 0;
+            
+            foreach ($car_binnacles as $car_binnacle) {
+                $delivery_time = Carbon::parse($car_binnacle->delivery_time);
+                $departure_time = Carbon::parse($car_binnacle->departure_time);
+
+                $time_minutes = $departure_time->diffInMinutes($delivery_time);
+                $total_minutes += $time_minutes;
+                $total_to_pay += $car_binnacle->Car->CarType->cost_minute * $time_minutes;
+            }
+
+            array_push($balance, [
+                'car_id' => $car_binnacle_id,
+                'car_registration_number' => $car_binnacles[0]->Car->registration_number,
+                'car_binnacles' => $car_binnacles,
+                'total_minutes' => $total_minutes,
+                'total_to_pay' => $total_to_pay
+            ]);
+        }
+
+        return $balance;
     }
 }

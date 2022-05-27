@@ -23,3 +23,4 @@ Route::apiResource('car-type', CarControllers\CarTypeController::class)
 Route::apiResource('car', CarControllers\CarController::class);
 Route::apiResource('car-binnacle', CarControllers\CarBinnacleController::class)
     ->except(['update', 'destroy']);
+Route::post('/print-binnacle-dates', [CarControllers\CarBinnacleController::class, 'printBinnacleByDates']);
