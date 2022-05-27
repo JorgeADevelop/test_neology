@@ -235,7 +235,8 @@ class CarBinnacleController extends Controller
     public function printBinnacleByDates(Request $request) {
         $validation = Validator::make($request->all(), [
             'start_date' => "date",
-            'end_date' => "date"
+            'end_date' => "date",
+            'filename' => "string"
         ]);
 
         if($validation->fails()) {
@@ -281,7 +282,7 @@ class CarBinnacleController extends Controller
 
         $pdf->loadView('pdf.binnacle', $data);
 
-        return $pdf->download('mi-archivo.pdf');
+        return $pdf->download($request->filename.'.pdf');
     }
 
     private function generateBalance($car_binnacles_id, $start_date, $end_date) {
