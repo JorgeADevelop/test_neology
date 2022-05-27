@@ -1,3 +1,4 @@
+
 # Test Backend developer Neology
 
 
@@ -29,6 +30,11 @@
 
 ## Tests
 
+* use the genetated command init a new month. This is a coron job that monthly delete the official cars binnacle.
+
+```bash
+  php artisan init:month
+
 * use the genetated command to send monthly balance. This is a coron job that monthly mails the balances
 
 ```bash
@@ -37,4 +43,3 @@
 ## Postman
 
 [Postman documentation](https://documenter.getpostman.com/view/10852019/Uz5AtKJA)
-

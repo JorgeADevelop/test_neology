@@ -14,7 +14,8 @@ class CarBinnacle extends Model
         'delivery_time',
         'deliver_by_user_id',
         'departure_time',
-        'departure_by_user_id'
+        'departure_by_user_id',
+        'amount'
     ];
 
     public function Car() {

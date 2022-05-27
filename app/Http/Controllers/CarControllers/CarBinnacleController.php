@@ -119,6 +119,7 @@ class CarBinnacleController extends Controller
 
             $request_data = [
                 'car_id' => $car->id,
+                'amount' => null,
                 'delivery_time' => Carbon::now('America/Mexico_City')->format('Y-m-d h:i:s'),
                 'deliver_by_user_id' => $request->user()->id,
                 'departure_time' => null,
@@ -149,8 +150,15 @@ class CarBinnacleController extends Controller
                 ]);
             }
 
+            $start_date = Carbon::parse($car_binnacle_exist->delivery_time, 'America/Mexico_City')->format('Y-m-d h:i:s');
+            $end_date = Carbon::now('America/Mexico_City');
+
+            $time_minutes = $end_date->diffInMinutes($start_date);
+            $total_to_pay =  $car_binnacle_exist->Car->CarType->cost_minute * $time_minutes;
+
             $request_data = [
-                'car_binnacles.departure_time' => Carbon::now('America/Mexico_City')->format('Y-m-d h:i:s'),
+                'car_binnacles.amount' => $total_to_pay,
+                'car_binnacles.departure_time' => $end_date,
                 'car_binnacles.departure_by_user_id' => $request->user()->id
             ];
 
@@ -248,9 +256,9 @@ class CarBinnacleController extends Controller
             ]);
         }
 
-        $start_date = Carbon::parse($request->start_date)->startOfDay();
+        $start_date = Carbon::parse($request->start_date, 'America/Mexico_City')->startOfDay();
 
-        $end_date = Carbon::parse($request->end_date)->endOfDay();
+        $end_date = Carbon::parse($request->end_date, 'America/Mexico_City')->endOfDay();
 
         $car_binnacles = CarBinnacle::select('car_id')
             ->where([
@@ -296,8 +304,8 @@ class CarBinnacleController extends Controller
             $total_minutes = 0;
             
             foreach ($car_binnacles as $car_binnacle) {
-                $delivery_time = Carbon::parse($car_binnacle->delivery_time);
-                $departure_time = Carbon::parse($car_binnacle->departure_time);
+                $delivery_time = Carbon::parse($car_binnacle->delivery_time, 'America/Mexico_City');
+                $departure_time = Carbon::parse($car_binnacle->departure_time, 'America/Mexico_City');
 
                 $time_minutes = $departure_time->diffInMinutes($delivery_time);
                 $total_minutes += $time_minutes;

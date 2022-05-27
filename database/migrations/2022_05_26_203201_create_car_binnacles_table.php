@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId('deliver_by_user_id');
             $table->dateTime('departure_time')->nullable();
             $table->foreignId('departure_by_user_id')->nullable();
+            $table->double('amount')->nullable();
             $table->timestamps();
 
             $table->foreign('car_id')->references('id')->on('cars');
